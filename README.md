@@ -1,6 +1,6 @@
 # ToDo application - based on Exploring Android book by commonsware
 
-This application is the result of following along with the Exploring Android 2.0 book by [Commonsware](https://wares.commonsware.com). The current state of the application supports the following use cases:
+This application is the result of following along with the Exploring Android 2.0 book by [Commonsware](https://commonsware.com/AndExplore/). The current state of the application supports the following use cases:
 
 - Viewing a list of ToDo items,
 - Clicking on a single ToDo item in the list of items to view its details in a new screen,
