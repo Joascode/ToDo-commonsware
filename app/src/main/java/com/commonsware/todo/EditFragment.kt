@@ -2,7 +2,10 @@ package com.commonsware.todo
 
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.commonsware.todo.databinding.TodoEditBinding
 import kotlinx.android.synthetic.main.todo_row.*
@@ -67,5 +70,18 @@ class EditFragment : Fragment() {
         )
 
         edited.let { motor.save(it) }
+        navToDisplay()
+    }
+
+    private fun navToDisplay() {
+        hideKeyboard()
+        findNavController().popBackStack()
+    }
+
+    private fun hideKeyboard() {
+        view?.let {
+            val imm = context?.getSystemService<InputMethodManager>()
+            imm?.hideSoftInputFromWindow(it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
     }
 }
