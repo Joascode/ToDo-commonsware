@@ -11,7 +11,7 @@ class ToDoRepository {
         }
     }
 
-    fun find(modelId: String) = items.find { it.id == modelId }
+    fun find(modelId: String?) = items.find { it.id == modelId }
 
     fun delete(model: ToDoModel) {
         items = items.filter { it.id != model.id }

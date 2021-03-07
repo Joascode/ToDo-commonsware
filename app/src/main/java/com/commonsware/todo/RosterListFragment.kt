@@ -29,7 +29,7 @@ class RosterListFragment : Fragment() {
             onCheckboxToggle = { motor.save(it.copy(isCompleted = !it.isCompleted)) },
             onRowClick = ::displayToDo
         )
-
+        binding.empty.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
         binding.items.apply {
             setAdapter(adapter)
             layoutManager = LinearLayoutManager(context)
@@ -56,7 +56,21 @@ class RosterListFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.add -> {
+                add()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun displayToDo(model: ToDoModel) {
         findNavController().navigate(RosterListFragmentDirections.displayModel(model.id))
+    }
+
+    private fun add() {
+        findNavController().navigate(RosterListFragmentDirections.createModel())
     }
 }
