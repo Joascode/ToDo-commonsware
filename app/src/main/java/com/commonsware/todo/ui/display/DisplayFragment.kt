@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.commonsware.todo.R
@@ -32,18 +33,20 @@ class DisplayFragment : Fragment() {
         .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        motor.getModel()?.let {
-            binding.apply {
-                completed.visibility = if (it.isCompleted) View.VISIBLE else View.GONE
-                desc.text = it.description
-                createdOn.text = DateUtils.getRelativeDateTimeString(
-                    requireContext(),
-                    it.createdOn.toEpochMilli(),
-                    DateUtils.MINUTE_IN_MILLIS,
-                    DateUtils.WEEK_IN_MILLIS,
-                    0
-                )
-                notes.text = it.notes
+        motor.states.observe(viewLifecycleOwner) { state ->
+            state.item?.let {
+                binding.apply {
+                    completed.visibility = if (it.isCompleted) View.VISIBLE else View.GONE
+                    desc.text = it.description
+                    createdOn.text = DateUtils.getRelativeDateTimeString(
+                        requireContext(),
+                        it.createdOn.toEpochMilli(),
+                        DateUtils.MINUTE_IN_MILLIS,
+                        DateUtils.WEEK_IN_MILLIS,
+                        0
+                    )
+                    notes.text = it.notes
+                }
             }
         }
     }

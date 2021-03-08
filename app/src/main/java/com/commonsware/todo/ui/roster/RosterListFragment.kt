@@ -3,6 +3,7 @@ package com.commonsware.todo.ui.roster
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,7 +45,17 @@ class RosterListFragment : Fragment() {
             )
         }
 
-        adapter.submitList(motor.getItems())
+        motor.states.observe(viewLifecycleOwner) { state ->
+            adapter.submitList(state.items)
+
+            when {
+                state.items.isEmpty() -> {
+                    binding.empty.visibility = View.VISIBLE
+                    binding.empty.setText(R.string.msg_empty)
+                }
+                else -> binding.empty.visibility = View.GONE
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
