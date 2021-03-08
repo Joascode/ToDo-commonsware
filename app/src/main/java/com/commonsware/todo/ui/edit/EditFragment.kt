@@ -5,6 +5,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.commonsware.todo.R
@@ -28,11 +29,15 @@ class EditFragment : Fragment() {
         .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        motor.getModel()?.let {
-            binding.apply {
-                binding.isCompleted.isChecked = it.isCompleted
-                binding.desc.setText(it.description)
-                binding.notes.setText(it.notes)
+        motor.states.observe(viewLifecycleOwner) { state ->
+            if(savedInstanceState == null) {
+                state.item?.let {
+                    binding.apply {
+                        binding.isCompleted.isChecked = it.isCompleted
+                        binding.desc.setText(it.description)
+                        binding.notes.setText(it.notes)
+                    }
+                }
             }
         }
     }
@@ -65,7 +70,7 @@ class EditFragment : Fragment() {
     }
 
     private fun save() {
-        val model = motor.getModel()
+        val model = motor.states.value?.item
         val edited = model?.copy(
             description = binding.desc.text.toString(),
             isCompleted = binding.isCompleted.isChecked,
@@ -81,7 +86,8 @@ class EditFragment : Fragment() {
     }
 
     private fun delete() {
-        motor.getModel()?.let {
+        val model = motor.states.value?.item
+        model?.let {
             motor.delete(it)
         }
         navToList()
