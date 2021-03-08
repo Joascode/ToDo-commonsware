@@ -39,7 +39,9 @@ android {
         // This enables the new Kotlin compiler.
         // See https://blog.jetbrains.com/kotlin/2021/02/the-jvm-backend-is-in-beta-let-s-make-it-stable-together/
         // for more details.
-        kotlinOptions.useIR = true
+        // Enabling this currently (8 March 2021) breaks the build, since it has problems with the inline map
+        // functions inside ToDoRepository's find function.
+        // kotlinOptions.useIR = true
     }
 }
 
